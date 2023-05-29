@@ -1,12 +1,7 @@
-resource "azurerm_resource_group" "vm-rg" {
-  name     = var.vm["name"]
-  location = var.vm["location"]
-}
-
 resource "azurerm_network_interface" "vm-nic" {
   name                = "${var.vm["name"]}-nic"
-  location            = azurerm_resource_group.vm-rg.location
-  resource_group_name = azurerm_resource_group.vm-rg.name
+  location            = azurerm_resource_group.network-rg.location
+  resource_group_name = azurerm_resource_group.network-rg.name
 
   ip_configuration {
     name                          = "${var.vm["name"]}-ipconfig"
@@ -17,15 +12,15 @@ resource "azurerm_network_interface" "vm-nic" {
 
 resource "azurerm_public_ip" "vm-pip" {
   name                = "${var.vm["name"]}-pip"
-  resource_group_name = azurerm_resource_group.vm-rg.name
-  location            = azurerm_resource_group.vm-rg.location
+  resource_group_name = azurerm_resource_group.network-rg.name
+  location            = azurerm_resource_group.network-rg.location
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_linux_virtual_machine" "vm_instance" {
   name                = "${var.vm["name"]}-os-disk"
-  resource_group_name = azurerm_resource_group.vm-rg.name
-  location            = azurerm_resource_group.vm-rg.location
+  resource_group_name = azurerm_resource_group.network-rg.name
+  location            = azurerm_resource_group.network-rg.location
   size                = var.vm["size"]
   admin_username      = var.vm["admin_username"]
   network_interface_ids = [
