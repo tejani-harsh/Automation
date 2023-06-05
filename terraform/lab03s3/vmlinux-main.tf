@@ -7,6 +7,7 @@ resource "azurerm_network_interface" "vm-nic" {
     name                          = "${var.vm["name"]}-ipconfig"
     subnet_id                     = azurerm_subnet.network-subnet1.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id = azurerm_public_ip.vm-pip.id
   }
   tags = local.common_tags
   lifecycle {
@@ -20,6 +21,7 @@ resource "azurerm_public_ip" "vm-pip" {
   resource_group_name = azurerm_resource_group.network-rg.name
   location            = azurerm_resource_group.network-rg.location
   allocation_method   = "Dynamic"
+  domain_name_label   = var.vm["name"]
   tags                = local.common_tags
   lifecycle {
     prevent_destroy = false
