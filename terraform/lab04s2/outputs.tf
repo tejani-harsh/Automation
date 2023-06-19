@@ -31,3 +31,20 @@ output "AddressSpace2" {
 output "linux_avs" {
   value = azurerm_availability_set.linux_avs.name
 }
+
+
+output "windows_availability_set_name" {
+  value       = azurerm_availability_set.windows_availability_set.name
+}
+output "windows_vm_name" {
+  value       = [for vm in azurerm_windows_virtual_machine.windows_vm : vm.name]
+}
+output "windows_vm_dns_labels" {
+  value       = [for vm in azurerm_windows_virtual_machine.windows_vm : azurerm_public_ip.windows_vm_public_ip_name[vm.name].domain_name_label]
+}
+output "windows_vm_private_ip_addresses" {
+  value       = [for vm in azurerm_windows_virtual_machine.windows_vm : azurerm_network_interface.windows_nic[vm.name].private_ip_address]
+}
+output "windows_vm_public_ip_addresses" {
+  value       = values(azurerm_public_ip.windows_vm_public_ip_name)[*].ip_address
+}
